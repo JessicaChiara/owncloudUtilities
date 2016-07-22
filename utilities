@@ -1,0 +1,28 @@
+############################### OWNCLOUD UTILITIES ###############################
+
+def call():
+  path = 'YOUR PATH'
+  #list of elements
+  listElements= getFileFromCloudCore(path)
+  for l in listElements:
+    nameElement = formatNameFromFile(l)
+    urlElement = urlFormatFilter(l)
+    
+
+def getFileFromCloudCore(path):
+    oc = owncloud.Client(OWNCLOUD_URL, verify_certs=False, single_session=True,debug=True)
+    oc.login(OWNCLOUD_USER, OWNCLOUD_PASSWORD)
+    lista=oc.get_shares(path,subfiles=True)
+    return lista
+    
+def urlFormatFilter(fileown):
+    token = fileown.get_token()
+    urlTopass = OWNCLOUD_URL+'s/'+token
+    return urlTopass
+
+
+def formatNameFromFile(fileown):
+    name=fileown.get_path()
+    arname = name.split('/')
+    originalname= arname[2]
+    return originalname
